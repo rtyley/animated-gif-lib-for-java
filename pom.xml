@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <groupId>com.madgag</groupId>
+    <artifactId>animated-gif-lib</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Animated GIF library for Java</name>
+    <description>
+        A re-package of the Animated GIF processing classes made
+        available by Kevin Weiner at http://www.fmsware.com/stuff/gif.html
+    </description>
+    <url>https://github.com/rtyley/animated-gif-lib-for-java</url>
+    <issueManagement>
+        <url>https://github.com/rtyley/animated-gif-lib-for-java/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+    <licenses>
+        <license>
+            <name>Apache V2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/rtyley/animated-gif-lib-for-java</url>
+        <connection>scm:git:git://github.com/rtyley/animated-gif-lib-for-java.git</connection>
+        <developerConnection>scm:git:git@github.com:rtyley/animated-gif-lib-for-java.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <email>roberto.tyley@gmail.com</email>
+            <name>Roberto Tyley</name>
+            <url>https://github.com/rtyley</url>
+            <id>rtyley</id>
+        </developer>
+    </developers>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

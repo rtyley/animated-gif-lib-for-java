@@ -260,7 +260,11 @@ public class AnimatedGifEncoder {
 		}
 		return started = ok;
 	}
-	
+
+    public boolean isStarted() {
+        return started;
+    }
+
 	/**
 	 * Analyzes image colors and creates color map.
 	 */

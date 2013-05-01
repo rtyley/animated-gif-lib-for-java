@@ -342,6 +342,8 @@ public class AnimatedGifEncoder {
 			BufferedImage temp =
 				new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 			Graphics2D g = temp.createGraphics();
+      g.setColor(transparent);
+      g.fillRect(0, 0, width, height);
 			g.drawImage(image, 0, 0, null);
 			image = temp;
 		}

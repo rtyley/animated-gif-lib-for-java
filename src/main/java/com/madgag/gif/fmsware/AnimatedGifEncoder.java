@@ -31,6 +31,7 @@ public class AnimatedGifEncoder {
 	protected int width; // image size
 	protected int height;
 	protected Color transparent = null; // transparent color if given
+  protected Color background = null;  // background color if given
 	protected int transIndex; // transparent index in color table
 	protected int repeat = -1; // no repeat
 	protected int delay = 0; // frame delay (hundredths)
@@ -49,7 +50,7 @@ public class AnimatedGifEncoder {
 	protected boolean sizeSet = false; // if false, get size from first frame
 	protected int sample = 10; // default sample interval for quantizer
 
-	/**
+  /**
 	 * Sets the delay time between each frame, or changes it
 	 * for subsequent frames (applies to last frame added).
 	 *
@@ -85,21 +86,37 @@ public class AnimatedGifEncoder {
 			repeat = iter;
 		}
 	}
-	
-	/**
-	 * Sets the transparent color for the last added frame
-	 * and any subsequent frames.
-	 * Since all colors are subject to modification
-	 * in the quantization process, the color in the final
-	 * palette for each frame closest to the given color
-	 * becomes the transparent color for that frame.
-	 * May be set to null to indicate no transparent color.
-	 *
-	 * @param c Color to be treated as transparent on display.
-	 */
-	public void setTransparent(Color c) {
-		transparent = c;
-	}
+
+  /**
+   * Sets the transparent color for the last added frame
+   * and any subsequent frames.
+   * Since all colors are subject to modification
+   * in the quantization process, the color in the final
+   * palette for each frame closest to the given color
+   * becomes the transparent color for that frame.
+   * May be set to null to indicate no transparent color.
+   *
+   * @param c Color to be treated as transparent on display.
+   */
+  public void setTransparent(Color c) {
+    transparent = c;
+  }
+
+  /**
+   * Sets the background color for the last added frame
+   * and any subsequent frames.
+   * Since all colors are subject to modification
+   * in the quantization process, the color in the final
+   * palette for each frame closest to the given color
+   * becomes the background color for that frame.
+   * May be set to null to indicate no background color
+   * which will default to black.
+   *
+   * @param c Color to be treated as background on display.
+   */
+  public void setBackground(Color c) {
+    background = c;
+  }
 	
 	/**
 	 * Adds next GIF frame.  The frame is not written immediately, but is
@@ -342,7 +359,7 @@ public class AnimatedGifEncoder {
 			BufferedImage temp =
 				new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 			Graphics2D g = temp.createGraphics();
-      g.setColor(transparent);
+      g.setColor(background);
       g.fillRect(0, 0, width, height);
 			g.drawImage(image, 0, 0, null);
 			image = temp;

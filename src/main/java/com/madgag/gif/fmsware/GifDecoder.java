@@ -446,8 +446,10 @@ public class GifDecoder {
 
 				//  Add a new string to the string table,
 
-				if (available >= MaxStackSize)
-					break;
+				if (available >= MaxStackSize) {
+					pixelStack[top++] = (byte) first;
+					continue;
+				}
 				pixelStack[top++] = (byte) first;
 				prefix[available] = (short) old_code;
 				suffix[available] = (byte) first;

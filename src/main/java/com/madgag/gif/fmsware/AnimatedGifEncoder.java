@@ -31,6 +31,8 @@ public class AnimatedGifEncoder {
 	protected int width; // image size
 	protected int height;
 	protected Color transparent = null; // transparent color if given
+	protected boolean transparentExactMatch = false; // transparent color will be found by looking for the closest color
+													 // or for the exact color if transparentExactMatch == true
   protected Color background = null;  // background color if given
 	protected int transIndex; // transparent index in color table
 	protected int repeat = -1; // no repeat
@@ -99,8 +101,29 @@ public class AnimatedGifEncoder {
 	 * @param c Color to be treated as transparent on display.
 	 */
 	public void setTransparent(Color c) {
-		transparent = c;
+		setTransparent (c, false);
 	}
+
+	/**
+	 * Sets the transparent color for the last added frame
+	 * and any subsequent frames.
+	 * Since all colors are subject to modification
+	 * in the quantization process, the color in the final
+	 * palette for each frame closest to the given color
+	 * becomes the transparent color for that frame.
+	 * If exactMatch is set to true, transparent color index
+	 * is search with exact match, and not looking for the
+	 * closest one.
+	 * May be set to null to indicate no transparent color.
+	 *
+	 * @param c Color to be treated as transparent on display.
+	 */
+	public void setTransparent(Color c, boolean exactMatch) {
+		transparent = c;
+		transparentExactMatch = exactMatch;
+	}
+	
+	
   /**
    * Sets the background color for the last added frame
    * and any subsequent frames.
@@ -313,7 +336,11 @@ public class AnimatedGifEncoder {
 		palSize = 7;
 		// get closest match to transparent color if specified
 		if (transparent != null) {
-			transIndex = findClosest(transparent);
+			if (transparentExactMatch) {
+				transIndex = findExact(transparent);
+			} else {
+				transIndex = findClosest(transparent);
+			}
 		}
 	}
 	
@@ -344,6 +371,30 @@ public class AnimatedGifEncoder {
 		return minpos;
 	}
 	
+	/**
+	 * Returns index of palette color closest to c
+	 *
+	 */
+	protected int findExact (Color c) {
+		if (colorTab == null) return -1;
+		int r = c.getRed() & 0xff;
+		int g = c.getGreen() & 0xff;
+		int b = c.getBlue() & 0xff;
+		int len = colorTab.length;
+		for (int i = 0; i < len; i++) {
+			int index = i / 3;
+			if (usedEntry[index]) {
+				int tr = colorTab[i++] & 0xff;
+				int tg = colorTab[i++] & 0xff;
+				int tb = colorTab[i] & 0xff;
+				if (r==tr && g==tg && b==tb) {
+					return index;
+				}
+			}
+		}
+		return -1;
+	}
+
 	/**
 	 * Extracts image pixels into byte array "pixels"
 	 */

@@ -76,6 +76,8 @@ public class TestAnimatedGifEncoder {
     public void testTransparentColorExactMAGENTA() throws Exception {
         encoder.setTransparent(MAGENTA, true);
         encodeSampleExactFrames();
+        assertThat(encoder.isColorUsed(MAGENTA)).isFalse(); // Called before finishing the encoder
+        encoder.finish();
         // As there is no MAGENTA color, the result should be a GIF with no visible transparency
         assertEncodedImageIsEqualTo("/AandB.gif");
     }
@@ -84,6 +86,7 @@ public class TestAnimatedGifEncoder {
     public void testTransparentColorCloseToBlue() throws Exception {
         encoder.setTransparent(BLUE);
         encodeSampleExactFrames();
+        encoder.finish();
         // As there are pixels close to blue, the result should be a GIF with a partial transparency on blue color
         assertEncodedImageIsEqualTo("/AandBCloseToBlue.gif");
     }
@@ -91,7 +94,9 @@ public class TestAnimatedGifEncoder {
     @Test
     public void testTransparentColorExactBLACK() throws Exception {
         encoder.setTransparent(BLACK, true);
-        encodeSampleExactFramesTransparent();
+        encodeSampleExactFrames();
+        assertThat(encoder.isColorUsed(BLACK)).isTrue(); // Called before finishing the encoder
+        encoder.finish();
         // As there is a BLACK Background color, the result should be a GIF mostly transparent
         assertEncodedImageIsEqualTo("/AandB-transparent.gif");
     }
@@ -119,15 +124,6 @@ public class TestAnimatedGifEncoder {
         encoder.setDelay(1000);
         encoder.addFrame(agif);
         encoder.addFrame(bgif);
-        encoder.finish();
-    }
-
-    private void encodeSampleExactFramesTransparent() {
-        encoder.setRepeat(0);
-        encoder.setDelay(1000);
-        encoder.addFrame(agif);
-        encoder.addFrame(bgif);
-        encoder.finish();
     }
 
     private void assertEncodedImageIsEqualTo(String name) throws IOException {

@@ -8,8 +8,11 @@ import java.awt.image.*;
 
 /**
  * Class GifDecoder - Decodes a GIF file into one or more frames.
- * <br><pre>
+ *
  * Example:
+ *
+ * <pre>
+ * {@code
  *    GifDecoder d = new GifDecoder();
  *    d.read("sample.gif");
  *    int n = d.getFrameCount();
@@ -18,6 +21,7 @@ import java.awt.image.*;
  *       int t = d.getDelay(i);  // display duration of frame in milliseconds
  *       // do something with frame
  *    }
+ * }
  * </pre>
  * No copyright asserted on the source code of this class.  May be used for
  * any purpose, however, refer to the Unisys LZW patent for any additional
@@ -262,7 +266,7 @@ public class GifDecoder {
 	/**
 	 * Reads GIF image from stream
 	 *
-	 * @param BufferedInputStream containing GIF file.
+	 * @param is BufferedInputStream containing GIF file.
 	 * @return read status code (0 = no errors)
 	 */
 	public int read(BufferedInputStream is) {
@@ -289,7 +293,7 @@ public class GifDecoder {
 	/**
 	 * Reads GIF image from stream
 	 *
-	 * @param InputStream containing GIF file.
+	 * @param is InputStream containing GIF file.
 	 * @return read status code (0 = no errors)
 	 */
 	public int read(InputStream is) {

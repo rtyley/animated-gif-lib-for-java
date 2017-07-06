@@ -336,11 +336,7 @@ public class AnimatedGifEncoder {
 		palSize = 7;
 		// get closest match to transparent color if specified
 		if (transparent != null) {
-			if (transparentExactMatch) {
-				transIndex = findExact(transparent);
-			} else {
-				transIndex = findClosest(transparent);
-			}
+			transIndex = transparentExactMatch ? findExact(transparent) : findClosest(transparent);
 		}
 	}
 	
@@ -375,7 +371,7 @@ public class AnimatedGifEncoder {
      * Returns true if the exact matching color is existing, and used in the color palette, otherwise, return false. This method has to be called before
      * finishing the image, because after finished the palette is destroyed and it will always return false.
      */
-    public boolean isColorUsed(Color c) {
+	boolean isColorUsed(Color c) {
         return findExact(c) != -1;
     }
 
@@ -391,19 +387,12 @@ public class AnimatedGifEncoder {
         int r = c.getRed();
         int g = c.getGreen();
         int b = c.getBlue();
-        int len = colorTab.length;
-        for (int i = 0; i < len;) {
-            int index = i / 3;
+        int len = colorTab.length / 3;
+        for (int index = 0; index < len; ++index) {
+            int i = index * 3;
             // If the entry is used in colorTab, then check if it is the same exact color we're looking for
-            if (usedEntry[index]) {
-                int tr = colorTab[i++] & 0xff;
-                int tg = colorTab[i++] & 0xff;
-                int tb = colorTab[i++] & 0xff;
-                if (r == tr && g == tg && b == tb) {
-                    return index;
-                }
-            } else { // If it is not used, then skip that color by increasing i 3 times
-                i += 3;
+            if (usedEntry[index] && r == (colorTab[i] & 0xff) && g == (colorTab[i+1] & 0xff) && b == (colorTab[i+2] & 0xff)) {
+				return index;
             }
         }
         return -1;

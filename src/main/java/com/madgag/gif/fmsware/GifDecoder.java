@@ -75,6 +75,7 @@ public class GifDecoder {
 	protected Rectangle lastRect; // last image rect
 	protected BufferedImage image; // current frame
 	protected BufferedImage lastImage; // previous frame
+	protected BufferedImage restorePrevImage; // for restore to previous
 
 	protected byte[] block = new byte[256]; // current data block
 	protected int blockSize = 0; // block size
@@ -162,13 +163,7 @@ public class GifDecoder {
 		// fill in starting image contents based on last image's dispose code
 		if (lastDispose > 0) {
 			if (lastDispose == 3) {
-				// use image before last
-				int n = frameCount - 2;
-				if (n > 0) {
-					lastImage = getFrame(n - 1);
-				} else {
-					lastImage = null;
-				}
+				lastImage = restorePrevImage;
 			}
 
 			if (lastImage != null) {
@@ -192,6 +187,15 @@ public class GifDecoder {
 					g.dispose();
 				}
 			}
+		}
+
+		// copy before drawing for restore to previous
+		if (dispose == 3) {
+			if (restorePrevImage == null) {
+				restorePrevImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE);
+			}
+			int[] restore = ((DataBufferInt) restorePrevImage.getRaster().getDataBuffer()).getData();
+			System.arraycopy(dest, 0, restore, 0, width * height);
 		}
 
 		// copy each source line to the appropriate place in the destination
